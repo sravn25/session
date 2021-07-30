@@ -9,23 +9,29 @@ function App() {
   const initialActivities = [
     {
       id: 1,
-      body: 'Programming',
+      body: 'Add activities',
     },
     {
       id: 2,
-      body: 'Write a new chapter ',
+      body: 'Complete activities',
     },
     {
       id: 3,
-      body: 'Flower the plants',
+      body: 'Take a rest',
     },
   ];
 
-  const [activities, setActivities] = useState(initialActivities);
+  const [activities, setActivities] = useState(
+    () => JSON.parse(localStorage.getItem('activities')) || []
+  );
 
-  const addActivity = (activity) => {
+  useEffect(() => {
+    localStorage.setItem('activities', JSON.stringify(activities));
+  }, [activities]);
+
+  const addActivity = activity => {
     setActivities([...activities, activity]);
-  }
+  };
 
   const deleteActivity = id => {
     const newActivity = activities.filter(act => act.id !== id);
@@ -38,7 +44,10 @@ function App() {
         <ColorModeSwitcher justifySelf="flex-end" />
         <VStack spacing={4}>
           <Head />
-          <ActivityList activityArr={activities} deleteActivity={deleteActivity}/>
+          <ActivityList
+            activityArr={activities}
+            deleteActivity={deleteActivity}
+          />
           <AddActivity activityArr={activities} addActivity={addActivity} />
         </VStack>
       </Grid>
