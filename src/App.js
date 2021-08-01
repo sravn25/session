@@ -6,6 +6,7 @@ import ActivityList from './components/ActivityList';
 import AddActivity from './components/AddActivity';
 
 function App() {
+  /*
   const initialActivities = [
     {
       id: 1,
@@ -20,6 +21,7 @@ function App() {
       body: 'Take a rest',
     },
   ];
+  */
 
   const [activities, setActivities] = useState(
     () => JSON.parse(localStorage.getItem('activities')) || []

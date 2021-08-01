@@ -1,12 +1,29 @@
 import React, { useState } from 'react';
-import { Button, HStack, Input, useToast } from '@chakra-ui/react';
+import {
+  Button,
+  HStack,
+  VStack,
+  Text,
+  Input,
+  useDisclosure,
+  useToast,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Center,
+  Spacer,
+} from '@chakra-ui/react';
 
 const AddActivity = ({ activityArr, addActivity }) => {
   const toast = useToast();
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!text) {
+    if (!title || !desc) {
       toast({
         title: 'No content',
         description: 'Cannot be empty',
@@ -19,29 +36,109 @@ const AddActivity = ({ activityArr, addActivity }) => {
 
     const activity = {
       id: activityArr.length + 1,
-      body: text,
+      title: title,
+      body: desc,
     };
 
     addActivity(activity);
-    setText('');
+    setTitle('');
+    setDesc('');
+    toast({
+      title: 'Added!',
+      status: 'success',
+      duration: '2000',
+      isClosable: true,
+    });
   };
 
-  const [text, setText] = useState('');
+  const clear = () => {
+    setTitle('');
+    setDesc('');
+  };
+
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = React.useRef();
 
   return (
-    <form onSubmit={handleSubmit}>
-      <HStack mt="8">
-        <Input
-          variant="filled"
-          placeholder="Add Activity"
-          value={text}
-          onChange={e => setText(e.target.value)}
-        ></Input>
-        <Button colorscheme="teal" px="8" type="submit" onClick={() => {}}>
-          Add
+    <div>
+      <br />
+      <Center>
+        <Button mt={4} onClick={onOpen}>
+          Add Activity
         </Button>
-      </HStack>
-    </form>
+      </Center>
+      <form onSubmit={handleSubmit}>
+        <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Add Activity</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack align="start" spacing={4}>
+                <Text justifySelf="flex-start">Title</Text>
+                <Input
+                  variant="flushed"
+                  placeholder="Title..."
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                />
+                <Text justifySelf="flex-start">Description</Text>
+                <Input
+                  variant="flushed"
+                  placeholder="Description..."
+                  value={desc}
+                  onChange={e => setDesc(e.target.value)}
+                />
+              </VStack>
+            </ModalBody>
+
+            <ModalFooter>
+              <HStack mt="8">
+                <Button
+                  colorScheme="green"
+                  px={8}
+                  pl={4}
+                  pr={4}
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  Add
+                </Button>
+                <Spacer />
+                <Button
+                  colorScheme="red"
+                  px={4}
+                  onClick={() => {
+                    onClose();
+                    clear();
+                  }}
+                >
+                  Close
+                </Button>
+              </HStack>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </form>
+      {/*
+      <form onSubmit={handleSubmit}>
+        <HStack mt="8">
+          <Input
+            variant="filled"
+            placeholder="Add Activity"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          ></Input>
+          <Button px="8" type="submit" onClick={() => {}}>
+            Add
+          </Button>
+        </HStack>
+      </form>
+      */}
+    </div>
   );
 };
 
