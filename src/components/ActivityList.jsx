@@ -9,7 +9,7 @@ import {
   Badge,
   Box,
 } from '@chakra-ui/react';
-import { FaInfo, FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 
 const ActivityList = ({ activityArr, deleteActivity }) => {
   if (!activityArr.length) {
@@ -50,11 +50,6 @@ const ActivityList = ({ activityArr, deleteActivity }) => {
           <HStack key={item.id}>
             <Text overflow="hidden">{item.title}</Text>
             <Spacer />
-            <IconButton
-              icon={<FaInfo />}
-              isRound="true"
-              onClick={() => console.log('')}
-            />
             <IconButton
               icon={<FaTrash />}
               isRound="true"

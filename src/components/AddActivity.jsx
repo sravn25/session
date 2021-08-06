@@ -16,14 +16,20 @@ import {
   ModalCloseButton,
   Center,
   Spacer,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
 
 const AddActivity = ({ activityArr, addActivity }) => {
+  const d = new Date();
   const toast = useToast();
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!title || !desc) {
+    if (!title) {
       toast({
         title: 'No content',
         description: 'Cannot be empty',
@@ -37,41 +43,55 @@ const AddActivity = ({ activityArr, addActivity }) => {
     const activity = {
       id: activityArr.length + 1,
       title: title,
-      body: desc,
+      timer: minute + hour * 60,
+      date: `${year}-${month}-${day}`,
     };
 
     addActivity(activity);
     setTitle('');
-    setDesc('');
     toast({
       title: 'Added!',
       status: 'success',
       duration: '2000',
       isClosable: true,
     });
+    clear();
   };
 
   const clear = () => {
     setTitle('');
-    setDesc('');
+    setMinute(0);
+    setHour(0);
+    setDay(d.getDate());
+    setMonth(d.getMonth() + 1);
+    setYear(d.getFullYear());
   };
 
   const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
+  const [minute, setMinute] = useState(0);
+  const [hour, setHour] = useState(0);
+  const [day, setDay] = useState(d.getDate());
+  const [month, setMonth] = useState(d.getMonth() + 1);
+  const [year, setYear] = useState(d.getFullYear());
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = React.useRef();
   const finalRef = React.useRef();
 
   return (
     <div>
-      <br />
       <Center>
         <Button mt={4} onClick={onOpen}>
           Add Activity
         </Button>
       </Center>
       <form onSubmit={handleSubmit}>
-        <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Add Activity</ModalHeader>
@@ -80,18 +100,54 @@ const AddActivity = ({ activityArr, addActivity }) => {
               <VStack align="start" spacing={4}>
                 <Text justifySelf="flex-start">Title</Text>
                 <Input
+                  ref={initialRef}
                   variant="flushed"
                   placeholder="Title..."
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                 />
-                <Text justifySelf="flex-start">Description</Text>
-                <Input
-                  variant="flushed"
-                  placeholder="Description..."
-                  value={desc}
-                  onChange={e => setDesc(e.target.value)}
-                />
+                <Text justifySelf="flex-start">Timer (Minute / Hour)</Text>
+                <HStack>
+                  <NumberInput
+                    min={0}
+                    value={minute}
+                    onChange={timer => setMinute(timer)}
+                  >
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <NumberInput
+                    min={0}
+                    value={hour}
+                    onChange={timer => setHour(timer)}
+                  >
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </HStack>
+                <Text justifySelf="flex-start">Due Date</Text>
+                <HStack spacing={4}>
+                  <Input
+                    variant="filled"
+                    placeholder="DD"
+                    value={day}
+                    onChange={e => setDay(e.target.value)}
+                  />
+                  <Input
+                    variant="filled"
+                    placeholder="MM"
+                    value={month}
+                    onChange={e => setMonth(e.target.value)}
+                  />
+                  <Input variant="filled" placeholder="YYYY" value={year} />
+                  onChange={e => setYear(e.target.value)}
+                </HStack>
               </VStack>
             </ModalBody>
 
@@ -123,21 +179,6 @@ const AddActivity = ({ activityArr, addActivity }) => {
           </ModalContent>
         </Modal>
       </form>
-      {/*
-      <form onSubmit={handleSubmit}>
-        <HStack mt="8">
-          <Input
-            variant="filled"
-            placeholder="Add Activity"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-          ></Input>
-          <Button px="8" type="submit" onClick={() => {}}>
-            Add
-          </Button>
-        </HStack>
-      </form>
-      */}
     </div>
   );
 };

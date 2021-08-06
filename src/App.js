@@ -1,28 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ChakraProvider, VStack, Grid, theme } from '@chakra-ui/react';
+import { ChakraProvider, VStack, Grid, theme, Spacer } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import Head from './components/Head';
 import ActivityList from './components/ActivityList';
 import AddActivity from './components/AddActivity';
+import Session from './components/Session';
 
 function App() {
-  /*
-  const initialActivities = [
-    {
-      id: 1,
-      body: 'Add activities',
-    },
-    {
-      id: 2,
-      body: 'Complete activities',
-    },
-    {
-      id: 3,
-      body: 'Take a rest',
-    },
-  ];
-  */
-
   const [activities, setActivities] = useState(
     () => JSON.parse(localStorage.getItem('activities')) || []
   );
@@ -51,6 +35,10 @@ function App() {
             deleteActivity={deleteActivity}
           />
           <AddActivity activityArr={activities} addActivity={addActivity} />
+          <Spacer />
+          <Spacer />
+          <Spacer />
+          <Session />
         </VStack>
       </Grid>
     </ChakraProvider>
