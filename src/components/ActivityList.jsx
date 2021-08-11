@@ -49,6 +49,16 @@ const ActivityList = ({ activityArr, deleteActivity }) => {
         {activityArr.map(item => (
           <HStack key={item.id}>
             <Text overflow="hidden">{item.title}</Text>
+            <Box
+              color="gray.500"
+              fontWeight="semibold"
+              letterSpacing="wide"
+              fontSize="xs"
+              textTransform="uppercase"
+              ml="2"
+            >
+              {item.date}
+            </Box>
             <Spacer />
             <IconButton
               icon={<FaTrash />}

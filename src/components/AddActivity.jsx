@@ -16,16 +16,27 @@ import {
   ModalCloseButton,
   Center,
   Spacer,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from '@chakra-ui/react';
 
 const AddActivity = ({ activityArr, addActivity }) => {
   const d = new Date();
   const toast = useToast();
+
+  const today = () => {
+    const zero = '0';
+    let thisDay = d.getDate();
+    const thisDayInt = parseInt(thisDay);
+    if (thisDayInt < 10) {
+      thisDay = zero + thisDay;
+    }
+    let thisMonth = d.getMonth() + 1;
+    const thisMonthInt = parseInt(thisMonth);
+    if (thisMonthInt < 10) {
+      thisMonth = zero + thisMonth;
+    }
+    const thisYear = d.getFullYear();
+    return `${thisYear}-${thisMonth}-${thisDay}`;
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -43,8 +54,7 @@ const AddActivity = ({ activityArr, addActivity }) => {
     const activity = {
       id: activityArr.length + 1,
       title: title,
-      timer: minute + hour * 60,
-      date: `${year}-${month}-${day}`,
+      date: date,
     };
 
     addActivity(activity);
@@ -60,19 +70,11 @@ const AddActivity = ({ activityArr, addActivity }) => {
 
   const clear = () => {
     setTitle('');
-    setMinute(0);
-    setHour(0);
-    setDay(d.getDate());
-    setMonth(d.getMonth() + 1);
-    setYear(d.getFullYear());
+    setDate(today);
   };
 
   const [title, setTitle] = useState('');
-  const [minute, setMinute] = useState(0);
-  const [hour, setHour] = useState(0);
-  const [day, setDay] = useState(d.getDate());
-  const [month, setMonth] = useState(d.getMonth() + 1);
-  const [year, setYear] = useState(d.getFullYear());
+  const [date, setDate] = useState(today);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef();
@@ -106,48 +108,14 @@ const AddActivity = ({ activityArr, addActivity }) => {
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                 />
-                <Text justifySelf="flex-start">Timer (Minute / Hour)</Text>
-                <HStack>
-                  <NumberInput
-                    min={0}
-                    value={minute}
-                    onChange={timer => setMinute(timer)}
-                  >
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                  <NumberInput
-                    min={0}
-                    value={hour}
-                    onChange={timer => setHour(timer)}
-                  >
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
-                </HStack>
                 <Text justifySelf="flex-start">Due Date</Text>
-                <HStack spacing={4}>
-                  <Input
-                    variant="filled"
-                    placeholder="DD"
-                    value={day}
-                    onChange={e => setDay(e.target.value)}
-                  />
-                  <Input
-                    variant="filled"
-                    placeholder="MM"
-                    value={month}
-                    onChange={e => setMonth(e.target.value)}
-                  />
-                  <Input variant="filled" placeholder="YYYY" value={year} />
-                  onChange={e => setYear(e.target.value)}
-                </HStack>
+                <Input
+                  type="date"
+                  name="due-date"
+                  min={today()}
+                  max="2022-04-30"
+                  onChange={e => setDate(e.target.value)}
+                />
               </VStack>
             </ModalBody>
 
