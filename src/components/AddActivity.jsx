@@ -16,6 +16,7 @@ import {
   ModalCloseButton,
   Center,
   Spacer,
+  Checkbox,
 } from '@chakra-ui/react';
 
 const AddActivity = ({ activityArr, addActivity }) => {
@@ -38,6 +39,13 @@ const AddActivity = ({ activityArr, addActivity }) => {
     return `${thisYear}-${thisMonth}-${thisDay}`;
   };
 
+  const sameYear = () => {
+    const a = parseInt(startDate.substring(0, 4));
+    const b = parseInt(dueDate.substring(0, 4));
+    if (a === b) return true;
+    else return false;
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
     if (!title) {
@@ -54,7 +62,10 @@ const AddActivity = ({ activityArr, addActivity }) => {
     const activity = {
       id: activityArr.length + 1,
       title: title,
-      date: date,
+      startDate: sameYear() ? startDate.substring(5, 10) : startDate,
+      dueDate: sameYear() ? dueDate.substring(5, 10) : dueDate,
+      sameDay: sameDate,
+      year: startDate.substring(0, 4),
     };
 
     addActivity(activity);
@@ -70,15 +81,19 @@ const AddActivity = ({ activityArr, addActivity }) => {
 
   const clear = () => {
     setTitle('');
-    setDate(today);
+    setStartDate(today);
+    setDueDate(today);
   };
 
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState(today);
+  const [startDate, setStartDate] = useState(today);
+  const [dueDate, setDueDate] = useState(today);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef();
   const finalRef = React.useRef();
+
+  const [sameDate, setSameDate] = useState(true);
 
   return (
     <div>
@@ -108,14 +123,40 @@ const AddActivity = ({ activityArr, addActivity }) => {
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                 />
-                <Text justifySelf="flex-start">Due Date</Text>
+                <Text justifySelf="flex-start">Start Date</Text>
                 <Input
                   type="date"
-                  name="due-date"
+                  name="start-date"
                   min={today()}
                   max="2022-04-30"
-                  onChange={e => setDate(e.target.value)}
+                  onChange={e => setStartDate(e.target.value)}
                 />
+                <HStack>
+                  <Text
+                    justifySelf="flex-start"
+                    fontSize="xs"
+                    color="gray.300"
+                    fontWeight="semibold"
+                  >
+                    Same Day
+                  </Text>
+                  <Checkbox
+                    isChecked={sameDate}
+                    onChange={e => setSameDate(!sameDate)}
+                  />
+                </HStack>
+                {!sameDate ? (
+                  <>
+                    <Text justifySelf="flex-start">End Date</Text>
+                    <Input
+                      type="date"
+                      name="end-date"
+                      min={today()}
+                      max="2022-04-30"
+                      onChange={e => setDueDate(e.target.value)}
+                    />
+                  </>
+                ) : null}
               </VStack>
             </ModalBody>
 

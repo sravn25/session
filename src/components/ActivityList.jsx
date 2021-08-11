@@ -57,7 +57,9 @@ const ActivityList = ({ activityArr, deleteActivity }) => {
               textTransform="uppercase"
               ml="2"
             >
-              {item.date}
+              {item.sameDay
+                ? item.startDate
+                : `${item.startDate} ~ ${item.dueDate}`}
             </Box>
             <Spacer />
             <IconButton
