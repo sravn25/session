@@ -24,3 +24,4 @@ yarn-error.log*
 
 # other
 src/components/Junk.jsx
+/doc.md
