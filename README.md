@@ -2,6 +2,9 @@
 
 > A web application made for productivity purpose
 
+[session](https://sravn.netlify.app/)\
+Deployed on Netlify
+
 ## Features
 
 1. Adding activity to a list
