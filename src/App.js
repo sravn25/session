@@ -4,7 +4,6 @@ import { ColorModeSwitcher } from './ColorModeSwitcher';
 import Head from './components/Head';
 import ActivityList from './components/ActivityList';
 import AddActivity from './components/AddActivity';
-import Session from './components/Session';
 
 function App() {
   const [activities, setActivities] = useState(
@@ -38,7 +37,6 @@ function App() {
           <Spacer />
           <Spacer />
           <Spacer />
-          <Session />
         </VStack>
       </Grid>
     </ChakraProvider>

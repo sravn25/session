@@ -1,5 +1,15 @@
-import React from 'react';
-import { Box, Heading, HStack, Text } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import {
+  Box,
+  Heading,
+  HStack,
+  Text,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
 
 const Session = () => {
   const colorTheme = [
@@ -35,6 +45,16 @@ const Session = () => {
     return `${color}.${palette}`;
   };
 
+  // const activity = {
+  // id: activityArr.length + 1,
+  // title: title,
+  // timer: minute + hour * 60,
+  // input: date,
+  // };
+
+  const [minute, setMinute] = useState(0);
+  const [hour, setHour] = useState(0);
+
   return (
     <>
       <HStack spacing={8}>
@@ -53,6 +73,27 @@ const Session = () => {
           </Heading>
           <Text p="3">Content 1</Text>
         </Box>
+      </HStack>
+      <Text justifySelf="flex-start">Timer (Minute / Hour)</Text>
+      <HStack>
+        <NumberInput
+          min={0}
+          value={minute}
+          onChange={timer => setMinute(timer)}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+        <NumberInput min={0} value={hour} onChange={timer => setHour(timer)}>
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
       </HStack>
     </>
   );
